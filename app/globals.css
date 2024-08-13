@@ -31,3 +31,18 @@ body {
     text-wrap: balance;
   }
 }
+
+.plus-icon:hover {
+  filter: brightness(100) saturate(100%) invert(29%) sepia(88%) saturate(748%)
+    hue-rotate(90deg) brightness(92%) contrast(92%);
+}
+
+.delete-icon:hover {
+  filter: invert(28%) sepia(95%) saturate(7486%) hue-rotate(357deg)
+    brightness(102%) contrast(119%);
+}
+
+.edit-icon:hover {
+  filter: invert(18%) sepia(100%) saturate(10000%) hue-rotate(60deg) brightness(110%)
+    contrast(100%);
+}
