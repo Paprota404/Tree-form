@@ -19,7 +19,7 @@ const TreeNode: React.FC<{ name: string, isRoot?: boolean }> = ({ name, isRoot=f
           </button>
           {!isRoot && (
             <button>
-              <Image className="delete-icon" src="/delete.svg" height={15} width={15} alt="delete" />
+              <Image className="delete-icon" src="/delete.svg" height={15} width={15} alt="delete"></Image>
             </button>
           )}
         </div>
