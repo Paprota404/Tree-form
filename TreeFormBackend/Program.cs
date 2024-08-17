@@ -1,10 +1,22 @@
-using Microsoft.EntityFrameWorkCore;
+using Microsoft.EntityFrameworkCore;
 using TreeDbContext;
+using Tree.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<TreeDbContext>(options => options.UseNpgsql());
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options=>{
+     options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000") // Replace with your frontend URL(s)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,6 +32,18 @@ if (app.Environment.IsDevelopment())
 else{
     app.UseHttpsRedirection();
 }
+
+
+app.UseCors("AllowSpecificOrigins");
+
+
+app.UseRouting();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
 
