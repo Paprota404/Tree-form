@@ -43,7 +43,7 @@ Upewnij się, że masz zainstalowane następujące oprogramowanie na swoim kompu
 
 2.W pliku .env, dodaj zmienną środowiskową NEXT_PUBLIC_API_BASE_URL z wartością odpowiadającą adresowi URL backendu, np.:
 
-NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+`NEXT_PUBLIC_API_BASE_URL=http://localhost:5000`
 
 3.Upewnij się, że plik .env jest dodany do .gitignore, aby nie został przypadkowo włączony do repozytorium.
 
