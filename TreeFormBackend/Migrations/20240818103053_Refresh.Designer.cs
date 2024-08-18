@@ -12,8 +12,8 @@ using TreeDbContext;
 namespace TreeFormBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240818094002_Migrate")]
-    partial class Migrate
+    [Migration("20240818103053_Refresh")]
+    partial class Refresh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

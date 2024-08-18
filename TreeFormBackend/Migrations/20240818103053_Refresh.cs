@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TreeFormBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrate : Migration
+    public partial class Refresh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

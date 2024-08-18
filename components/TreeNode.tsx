@@ -27,20 +27,26 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const [newName, setNewName] = useState(node.Name);
   const [newParentId, setNewParentId] = useState<number | null>(null);
 
-  const addNode = async (node: any) => {
+  const addNode = async (node: any, parentId: number | null) => {
+    const newNode = {
+      ...node,
+     
+    };
+
+    console.log("Sending node:", newNode);
+
     const response = await fetch("http://localhost:5063/api/TreeNode/AddNode", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(node),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newNode),
     });
     if (!response.ok) {
-        throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     return response.json();
-};
-
+  };
 
   const updateNode = async (node: any) => {
     const response = await fetch(
@@ -74,11 +80,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({
       throw new Error("Network response was not ok");
     }
   };
-  
+
   const handleAdd = async () => {
-    await addNode(node);
+    const parentId = node.Id;
+    await addNode(node, parentId);
     onAdd();
-  }
+  };
 
   const handleUpdate = async () => {
     await updateNode({ ...node, Name: newName });
