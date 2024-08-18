@@ -12,7 +12,7 @@ using TreeDbContext;
 namespace TreeFormBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240818103053_Refresh")]
+    [Migration("20240818155527_Refresh")]
     partial class Refresh
     {
         /// <inheritdoc />

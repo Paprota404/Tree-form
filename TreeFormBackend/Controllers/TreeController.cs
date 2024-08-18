@@ -44,10 +44,10 @@ public class TreeNodeController : ControllerBase
     [HttpPost("AddNode")]
     public async Task<IActionResult> AddNode([FromBody] TreeNode newNode)
     {
-        if (newNode == null || newNode.ParentId == null)
+        if (newNode == null)
             return BadRequest("Invalid node");
 
-        
+
         newNode.ParentId = newNode.Id;
         newNode.Id = GenerateUniqueId();
 
@@ -61,10 +61,8 @@ public class TreeNodeController : ControllerBase
 
     private int GenerateUniqueId()
     {
-        // Get current UTC timestamp
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-        // Convert timestamp to integer (you may need to adjust this depending on your ID size requirements)
         return (int)timestamp;
     }
 
@@ -92,37 +90,45 @@ public class TreeNodeController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("MoveNode/{nodeId}/to/{newParentId}")]
-    public async Task<IActionResult> MoveNode(int nodeId, int newParentId)
-    {
-        var node = await _context.TreeNodes.FindAsync(nodeId);
-        var newParent = await _context.TreeNodes.FindAsync(newParentId);
-
-        if (node == null || newParent == null)
-            return NotFound("Node or new parent not found");
-
-        node.ParentId = newParentId;
-        await _context.SaveChangesAsync();
-        return Ok(node);
-    }
+    
 
     [HttpPost("SortNodes")]
-    public async Task<IActionResult> SortNodes([FromBody] List<int> nodeIds)
+    public async Task<IActionResult> SortNodes()
     {
-        var nodes = await _context.TreeNodes
-            .Where(n => nodeIds.Contains(n.Id))
-            .ToListAsync();
+       
+        var nodes = await _context.TreeNodes.ToListAsync();
 
-        if (nodes.Count != nodeIds.Count)
-            return NotFound("Some nodes not found");
+        var nodeDict = nodes.ToDictionary(n => n.Id);
 
-        for (int i = 0; i < nodes.Count; i++)
+        var sortedRootNodes = new List<TreeNode>();
+
+        var rootNodes = nodes.Where(n => n.ParentId == null).OrderBy(n => n.Name).ToList();
+
+        foreach (var rootNode in rootNodes)
         {
-            nodes[i].Order = i;
+            SortNodeRecursively(rootNode, nodeDict, sortedRootNodes);
         }
 
-        _context.TreeNodes.UpdateRange(nodes);
+        for (int i = 0; i < sortedRootNodes.Count; i++)
+        {
+            sortedRootNodes[i].Order = i;
+        }
+
+        _context.TreeNodes.UpdateRange(sortedRootNodes);
         await _context.SaveChangesAsync();
-        return Ok(nodes);
+
+        return Ok();
+    }
+
+    private void SortNodeRecursively(TreeNode node, Dictionary<int, TreeNode> nodeDict, List<TreeNode> sortedNodes)
+    {
+        sortedNodes.Add(node);
+
+        var children = nodeDict.Values.Where(n => n.ParentId == node.Id).OrderBy(n => n.Name).ToList();
+
+        foreach (var child in children)
+        {
+            SortNodeRecursively(child, nodeDict, sortedNodes);
+        }
     }
 }

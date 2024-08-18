@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TreeFormBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f864c3ac7bce5572b3a21c3f1c478013f1747165")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4a1fde2534133d3aee630d9231b1ec46fd2486f")]
 [assembly: System.Reflection.AssemblyProductAttribute("TreeFormBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TreeFormBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
