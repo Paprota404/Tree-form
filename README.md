@@ -37,7 +37,7 @@ Upewnij się, że masz zainstalowane następujące oprogramowanie na swoim kompu
 
 4. Uruchom serwer backendowy używając polecenia `dotnet run`. Serwer backendowy będzie zazwyczaj dostępny pod adresem `http://localhost:5000`.
 
-### Konfigurowanie Backend
+### Plik env
 
 1.W projekcie frontendowym, stwórz plik .env w katalogu głównym, jeśli jeszcze go nie masz.
 
