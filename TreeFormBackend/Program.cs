@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using TreeDbContext;
 using Tree.Controllers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using TreeNodes.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+    
 
 builder.Services.AddCors(options=>{
      options.AddPolicy("AllowSpecificOrigins",

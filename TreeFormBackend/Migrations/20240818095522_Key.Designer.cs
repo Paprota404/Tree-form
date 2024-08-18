@@ -12,8 +12,8 @@ using TreeDbContext;
 namespace TreeFormBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240817093948_CascadeDelete")]
-    partial class CascadeDelete
+    [Migration("20240818095522_Key")]
+    partial class Key
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,23 +34,49 @@ namespace TreeFormBackend.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("TreeNodeId")
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ParentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TreeNodeId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("TreeNodes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Root",
+                            Order = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Child 1",
+                            Order = 0,
+                            ParentId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Child 2",
+                            Order = 1,
+                            ParentId = 1
+                        });
                 });
 
             modelBuilder.Entity("TreeNodes.Models.TreeNode", b =>
                 {
                     b.HasOne("TreeNodes.Models.TreeNode", null)
                         .WithMany("Children")
-                        .HasForeignKey("TreeNodeId")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

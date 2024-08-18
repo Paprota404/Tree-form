@@ -34,13 +34,22 @@ const Tree: React.FC = () => {
   };
 
   const fetchTreeNodes = async () => {
-    const data = await getTreeNodes();
-    setNodes(data);
+    try {
+      const data = await getTreeNodes();
+      console.log('Fetched nodes:', data); // Add this line to inspect the data
+      setNodes(data);
+    } catch (error) {
+      console.error('Error fetching tree nodes:', error);
+    }
   };
 
   useEffect(() => {
     fetchTreeNodes();
   }, []);
+
+  const handleAdd = () => {
+    fetchTreeNodes();
+  }
 
   const handleUpdate = () => {
     // Refresh the tree structure
@@ -78,6 +87,7 @@ const Tree: React.FC = () => {
             key={node.Id}
             node={node}
             name={node.name}
+            onAdd={handleAdd}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
             onMove={handleMove}

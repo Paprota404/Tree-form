@@ -2,11 +2,12 @@
 import Image from "next/image";
 
 import React, { useState } from "react";
-import { deleteNode, moveNode } from "../utils/api";
+import { moveNode } from "../utils/api";
 
 interface TreeNodeProps {
   node: any;
   name: string;
+  onAdd: () => void;
   onUpdate: () => void;
   onDelete: () => void;
   onMove: (nodeId: number, newParentId: number) => void;
@@ -16,6 +17,7 @@ interface TreeNodeProps {
 const TreeNode: React.FC<TreeNodeProps> = ({
   node,
   name,
+  onAdd,
   onUpdate,
   onDelete,
   onMove,
@@ -25,9 +27,9 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const [newName, setNewName] = useState(node.Name);
   const [newParentId, setNewParentId] = useState<number | null>(null);
 
-  const updateNode = async (id: number, node: any) => {
-    const response = await fetch(`http://localhost:5063/api/TreeNode/UpdateNode/${id}`, {
-        method: 'PUT',
+  const addNode = async (node: any) => {
+    const response = await fetch("http://localhost:5063/api/TreeNode/AddNode", {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -39,14 +41,53 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     return response.json();
 };
 
+
+  const updateNode = async (node: any) => {
+    const response = await fetch(
+      "http://localhost:5063/api/TreeNode/UpdateNode",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(node),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
+  const deleteNode = async (node: any) => {
+    const response = await fetch(
+      "http://localhost:5063/api/TreeNode/DeleteNode",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(node),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+  };
+  
+  const handleAdd = async () => {
+    await addNode(node);
+    onAdd();
+  }
+
   const handleUpdate = async () => {
-    await updateNode(node.Id, { ...node, Name: newName });
+    await updateNode({ ...node, Name: newName });
     setEditing(false);
     onUpdate();
   };
 
   const handleDelete = async () => {
-    await deleteNode(node.Id);
+    await deleteNode(node);
     onDelete();
   };
 
@@ -58,11 +99,11 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   };
 
   const handleEditClick = () => {
-    setEditing(true); 
+    setEditing(true);
   };
 
   const handleCancelEdit = () => {
-    setEditing(false); 
+    setEditing(false);
     setNewName(node.Name);
   };
 
@@ -86,10 +127,10 @@ const TreeNode: React.FC<TreeNodeProps> = ({
 
         {/* Image Buttons */}
         <div className="flex gap-2">
-        {editing ? (
+          {editing ? (
             <>
               <Image
-                src="/check.svg"
+                src="/check-svgrepo-com.svg"
                 alt="Save"
                 width={15}
                 height={15}
@@ -97,7 +138,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 style={{ cursor: "pointer", marginLeft: "10px" }}
               />
               <Image
-                src="/cancel-svgrepo-com.svg"
+                src="/cancel-svgrepo-com (2).svg"
                 alt="Cancel"
                 width={15}
                 height={15}
@@ -112,7 +153,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 alt="Add"
                 width={15}
                 height={15}
-                onClick={() => handleMove(1)} // Example: Move to Root
+                onClick={handleAdd}
                 style={{ cursor: "pointer", marginLeft: "10px" }}
               />
               <Image
@@ -144,6 +185,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
               key={childNode.Id}
               node={childNode}
               name={childNode.name}
+              onAdd={onAdd}
               onUpdate={onUpdate}
               onDelete={onDelete}
               onMove={onMove}
