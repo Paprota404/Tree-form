@@ -37,6 +37,18 @@ Upewnij się, że masz zainstalowane następujące oprogramowanie na swoim kompu
 
 4. Uruchom serwer backendowy używając polecenia `dotnet run`. Serwer backendowy będzie zazwyczaj dostępny pod adresem `http://localhost:5000`.
 
+### Konfigurowanie Backend
+
+1.W projekcie frontendowym, stwórz plik .env w katalogu głównym, jeśli jeszcze go nie masz.
+
+2.W pliku .env, dodaj zmienną środowiskową NEXT_PUBLIC_API_BASE_URL z wartością odpowiadającą adresowi URL backendu, np.:
+
+NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+
+3.Upewnij się, że plik .env jest dodany do .gitignore, aby nie został przypadkowo włączony do repozytorium.
+
+4.Po zapisaniu pliku .env, uruchom serwer deweloperski frontendowy ponownie, aby zastosować zmiany.
+
 ### Konfigurowanie Frontend
 
 1. Przejdź do katalogu projektu frontendowego.
